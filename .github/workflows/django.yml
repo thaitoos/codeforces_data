@@ -10,4 +10,4 @@ jobs:
         pip3 install django
         pip3 install requests
         
-        python3 mamange.py test
+        python3 manage.py test
