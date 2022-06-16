@@ -10,6 +10,5 @@ jobs:
         pip3 install django
         pip3 install requests
         cd ..
-        cd ..
         cd codeforces_project
         python3 manage.py test
