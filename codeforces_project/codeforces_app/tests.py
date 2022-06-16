@@ -5,6 +5,7 @@ from django.test import TestCase
 class Tests(TestCase):
     def test_page_load(self):
         c = Client()
-        response = c.get('/codeforces_app/show')
+        #response = c.get('/codeforces_app/show')
+        response = c.get('/codeforces_app/')
         self.assertEqual(response.status_code,200)
     
