@@ -1,9 +1,10 @@
 from django.test import Client
-
+from django.test import TestCase
 # Create your tests here.
 
-def test_page_load(self):
-    c = Client()
-    response = c.get("/show/")
-    self.assertEqual(response.status_code,200)
+class Tests(TestCase):
+    def test_page_load(self):
+        c = Client()
+        response = c.get('/codeforces_app/show')
+        self.assertEqual(response.status_code,200)
     

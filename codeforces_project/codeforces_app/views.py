@@ -33,9 +33,10 @@ def get_stats(request):
     data_obj = Data(name = 'percentiles', value = json.dumps(percentiles))
     data_obj.save()
 def show(request):
-    json_percentiles = Data.objects.get(name='percentiles').value
-    json_percentiles = json.loads(json_percentiles)
-    return render(request, 'codeforces_app/show.html', {
-        'json_percentiles' : json_percentiles
-    })
+    #json_percentiles = Data.objects.get(name='percentiles').value
+    #json_percentiles = json.loads(json_percentiles)
+    #return render(request, 'codeforces_app/show.html', {
+        #'json_percentiles' : json_percentiles
+    #})
+    return render(request, "codeforces_app/index.html")
 
