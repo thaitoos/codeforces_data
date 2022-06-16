@@ -9,6 +9,5 @@ jobs:
       run: |
         pip3 install django
         pip3 install requests
-        pip3 install sqlite3
         
         python3 mamange.py test
