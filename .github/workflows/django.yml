@@ -9,5 +9,6 @@ jobs:
       run: |
         pip3 install django
         pip3 install requests
+        pip3 install decouple
         cd codeforces_project
         python3 manage.py test
