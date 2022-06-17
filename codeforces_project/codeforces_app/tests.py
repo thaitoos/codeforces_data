@@ -1,7 +1,8 @@
 from django.test import Client
 from django.test import TestCase
-from codeforces_project.codeforces_app.views import get_contestant_place
-from models import Contestant
+#from views import get_contestant_place
+from .views import get_contestant_place
+from .models import Contestant
 # Create your tests here.
 
 class Tests(TestCase):

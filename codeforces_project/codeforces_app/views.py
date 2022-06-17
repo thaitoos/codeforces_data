@@ -10,8 +10,8 @@ def index(request):
     #return HttpResponse('yo')
 #@staff_member_required
 def get_contestant_place(rating, size):#returns number of cotestant with a lower or equal rating
-    if rating < -100 or rating > 4500:
-        return -1
+    #if rating < -100 or rating > 4500:
+    #    return -1
     l = int(1)
     r = int(size)
     while(l<r):
@@ -23,7 +23,7 @@ def get_contestant_place(rating, size):#returns number of cotestant with a lower
             r=previous_m
         else:
             l=previous_m+1
-    if l == size and Contestant.objects.get(index = l).rating <=rating:
+    if l == size and Contestant.objects.get(index = 1).rating <= rating:
         return l
     return l-1
 
