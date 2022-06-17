@@ -9,6 +9,22 @@ def index(request):
     return render(request, "codeforces_app/index.html")
     #return HttpResponse('yo')
 #@staff_member_required
+def get_contestant_place(rating, size):#returns number of cotestant with a lower rating
+    if rating < -100 or rating > 4500:
+        return -1
+    l = int(1)
+    r = int(size)
+    while(l<r):
+        m = int((l+r)//2)
+        previous_m = m
+        m = size + 1 - m # best contestant has index 1 
+        m_rating = Contestant.objects.get(index = m).rating
+        if m_rating > rating:# counts other contestants with the same rating as worse
+            r=previous_m
+        else:
+            l=previous_m+1
+    return l-1
+
 def get_stats(request):
     data = requests.get('https://codeforces.com/api/user.ratedList')
     if(data.status_code!=200):
@@ -32,6 +48,8 @@ def get_stats(request):
     num_of_contestants = Contestant.objects.all().count()
     for i in range(1,100):
         place = int(i/100*num_of_contestants)
+        place = max(place,0)
+        place = min(place, ctr-1)
         ith_percentile_rating = sorted_contestants[place].rating
         percentiles[i] = ith_percentile_rating
     print(percentiles)
