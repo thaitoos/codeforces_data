@@ -1,13 +1,8 @@
+{%extends "codeforces_app/layout.html"%}
 {%load static%}
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-    <title>cf stats</title>
-<head>
-<body>
+{%block body%}
     {%if json_percentiles%}
         {{ json_percentiles|json_script:"json_percentiles" }}
         <script src = "{%static 'show.js'%}"></script>
     {%endif%}   
-</body>
-</html>
+{%endblock%}

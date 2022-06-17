@@ -1,14 +1,6 @@
-{%load static%}
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-    <title>cf stats</title>
-<head>
-<body>
-    <button id='get_stats'>get stats</button>
-    <h1>
-        the average rating is {{average}}
-    </h1>
-    <!--<script src="{%static 'index.js'%}"></script>-->    
-</body>
-</html>
+{% extends "codeforces_app/layout.html" %}
+{%block body%}
+<h1>
+    the average rating is {{average}}
+</h1>  
+{%endblock%}
