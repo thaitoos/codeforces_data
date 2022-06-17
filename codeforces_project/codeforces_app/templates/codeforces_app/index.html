@@ -1,6 +1,68 @@
 {% extends "codeforces_app/layout.html" %}
+<!-- enter your handle or rating and get top% and how far you are from average-->
 {%block body%}
-<h1>
-    the average rating is {{average}}
-</h1>  
+
+    <!-- the average rating is {{average}} -->
+    <form action = "" method = "POST">
+        {%csrf_token%}
+        <!--{{rating_form}}-->
+        <label for="rating">Enter your rating</label>
+        <div class="form-group">
+            {{rating_form.rating}}
+            <!--{{rating_form.type.as_hidden}}-->
+        </div>
+        <button class="btn btn-primary" type="submit" name="submit-rating">Submit</button>
+    </form>
+    <form action = "" method = "POST">
+        {%csrf_token%}
+        <label for="rating">Enter your username</label>
+        <div class="form-group">
+            {{handle_form.username}}
+            <!--{{handle_form.type.as_hidden}}-->
+        </div>
+        <button class="btn btn-primary" type="submit" name="submit-handle">Submit</button>
+    </form>
+    {%if load_type == 'error'%}
+        <div>
+            {{message}}
+        </div>
+    {%endif%}
+    {%if load_type == 'handle'%}
+        <div>
+            {{percent_worse}}
+        </div>
+        <div>
+            {{contestants_worse}}
+        </div>
+        <div>
+            {{distance_to_average}}
+        </div>
+        <div>
+            {{above}}
+        </div>
+        <div>
+            {{username}}
+        </div>
+        <div>
+            {{rating}}
+        </div>
+    {%endif%}
+    {%if load_type == 'rating'%}
+        <div>
+            {{percent_worse}}
+        </div>
+        <div>
+            {{contestants_worse}}
+        </div>
+        <div>
+            {{distance_to_average}}
+        </div>
+        <div>
+            {{above}}
+        </div>
+        <div>
+            {{rating}}
+        </div>
+    {%endif%}
+  
 {%endblock%}
