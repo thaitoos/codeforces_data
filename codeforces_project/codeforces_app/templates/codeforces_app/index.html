@@ -27,41 +27,21 @@
             {{message}}
         </div>
     {%endif%}
-    {%if load_type == 'handle'%}
+    {%if load_type == 'handle' or load_type == 'rating'%}
+        {%if load_type == 'handle'%}
         <div>
-            {{percent_worse}}
+            {{username}},
+        </div>
+        {%endif%}
+        <div>
+            Your rating is {{rating}}
         </div>
         <div>
-            {{contestants_worse}}
+            You are better than {{percent_worse}}% of all contestants
         </div>
+        <!--{{contestants_worse}}-->
         <div>
-            {{distance_to_average}}
-        </div>
-        <div>
-            {{above}}
-        </div>
-        <div>
-            {{username}}
-        </div>
-        <div>
-            {{rating}}
-        </div>
-    {%endif%}
-    {%if load_type == 'rating'%}
-        <div>
-            {{percent_worse}}
-        </div>
-        <div>
-            {{contestants_worse}}
-        </div>
-        <div>
-            {{distance_to_average}}
-        </div>
-        <div>
-            {{above}}
-        </div>
-        <div>
-            {{rating}}
+            Your rating is {{distance_to_average}} points {%if above %}above{%endif%}{%if not above %}below{%endif%} average
         </div>
     {%endif%}
   
