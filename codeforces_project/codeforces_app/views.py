@@ -9,7 +9,7 @@ def index(request):
     return render(request, "codeforces_app/index.html")
     #return HttpResponse('yo')
 #@staff_member_required
-def get_contestant_place(rating, size):#returns number of cotestant with a lower rating
+def get_contestant_place(rating, size):#returns number of cotestant with a lower or equal rating
     if rating < -100 or rating > 4500:
         return -1
     l = int(1)
@@ -23,6 +23,8 @@ def get_contestant_place(rating, size):#returns number of cotestant with a lower
             r=previous_m
         else:
             l=previous_m+1
+    if l == size and Contestant.objects.get(index = l).rating <=rating:
+        return l
     return l-1
 
 def get_stats(request):
