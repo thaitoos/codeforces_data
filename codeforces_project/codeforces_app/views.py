@@ -20,7 +20,13 @@ def get_stats(request):
         ctr+=1
         sum+=user['rating']
     Contestant.objects.all().delete()
-    objs = Contestant.objects.bulk_create([Contestant(rating = int(user['rating']), handle = user['handle']) for user in data['result']])
+    #objs = Contestant.objects.bulk_create([Contestant(rating = int(user['rating']), handle = user['handle']) for user in data['result']])
+    contestant_list = []
+    ind = 1
+    for user in data['result']:
+        contestant_list+=[Contestant(rating = int(user['rating']), handle = user['handle'], index = ind)]
+        ind+=1
+    objs = Contestant.objects.bulk_create(contestant_list)
     sorted_contestants = Contestant.objects.all().order_by('rating')
     percentiles = {}
     num_of_contestants = Contestant.objects.all().count()
