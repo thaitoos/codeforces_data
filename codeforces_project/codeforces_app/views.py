@@ -14,18 +14,18 @@ def get_stats(request):
     if(data.status_code!=200):
         return
     data = data.json() # its already a json file ????
-    ctr = 0
-    sum = 0
-    for user in data['result']:
-        ctr+=1
-        sum+=user['rating']
     Contestant.objects.all().delete()
     #objs = Contestant.objects.bulk_create([Contestant(rating = int(user['rating']), handle = user['handle']) for user in data['result']])
     contestant_list = []
+    ctr = 0
+    sum = 0
     ind = 1
     for user in data['result']:
         contestant_list+=[Contestant(rating = int(user['rating']), handle = user['handle'], index = ind)]
+        ctr+=1
+        sum+=user['rating']
         ind+=1
+    ind-=1
     objs = Contestant.objects.bulk_create(contestant_list)
     sorted_contestants = Contestant.objects.all().order_by('rating')
     percentiles = {}
@@ -37,6 +37,10 @@ def get_stats(request):
     print(percentiles)
     Data.objects.all().delete()
     data_obj = Data(name = 'percentiles', value = json.dumps(percentiles))
+    data_obj.save()
+    data_obj = Data(name = 'size', value = str(ctr))
+    data_obj.save()
+    data_obj = Data(name = 'average', value = str(sum/ctr))
     data_obj.save()
 def show(request):
     json_percentiles = Data.objects.get(name='percentiles').value
