@@ -3,6 +3,13 @@
 {%block body%}
     {%if json_percentiles%}
         {{ json_percentiles|json_script:"json_percentiles" }}
+        {{ average|json_script:"average" }}
+        <div id="chart"></div>
         <script src = "{%static 'show.js'%}"></script>
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+        <script src = 'show.js'>
+        </script>
     {%endif%}   
 {%endblock%}
