@@ -1,10 +1,13 @@
-{%load static%}
-<!doctype HTML>
+{% load static %}
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
     <title>codeforces_data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel='stylesheet' href="{%static 'codeforces_app/index.css'%}">
+    {% block script %}
+    {% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -14,8 +17,8 @@
             <a class="nav-item nav-link" href="#">How do You compare?</a>
         </div>
     </nav>
-    {%block body%}
-    {%endblock%}
-    <script src="{%static 'codeforces_app/show.js'%}"></script>
+    {% block body %}
+    {% endblock %}
+        <!--<script src="{%static 'codeforces_app/show.js'%}"></script>-->
 </body>
 </html>

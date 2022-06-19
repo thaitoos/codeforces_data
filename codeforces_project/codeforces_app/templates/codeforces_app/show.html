@@ -1,11 +1,16 @@
-{%extends "codeforces_app/layout.html"%}
-{%block body%}
-    {%if json_percentiles%}
+{% extends "codeforces_app/layout.html" %}
+{% block body %}
+    {% if json_percentiles %}
         {{ json_percentiles|json_script:"json_percentiles" }}
         {{ average|json_script:"average" }}
         <div id="chart"></div>
         <div>
             <canvas id="myChart"></canvas>
         </div>
-    {%endif%}  
-{%endblock%}
+    {% endif %}  
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script src="{%static 'codeforces_app/show.js'%}"></script>
+{% endblock %}

@@ -3,25 +3,30 @@
 {%block body%}
 
     <!-- the average rating is {{average}} -->
-    <form action = "" method = "POST">
-        {%csrf_token%}
-        <!--{{rating_form}}-->
-        <label for="rating">Enter your rating</label>
-        <div class="form-group">
-            {{rating_form.rating}}
-            <!--{{rating_form.type.as_hidden}}-->
-        </div>
-        <button class="btn btn-primary" type="submit" name="submit-rating">Submit</button>
-    </form>
-    <form action = "" method = "POST">
-        {%csrf_token%}
-        <label for="rating">Enter your username</label>
-        <div class="form-group">
-            {{handle_form.username}}
-            <!--{{handle_form.type.as_hidden}}-->
-        </div>
-        <button class="btn btn-primary" type="submit" name="submit-handle">Submit</button>
-    </form>
+    <div class="forms_container">
+        <form class="form" id="form1" action = "" method = "POST">
+            {%csrf_token%}
+            <!--{{rating_form}}-->
+            <label for="rating">Enter your rating</label>
+            <div class="form-group">
+                {{rating_form.rating}}
+                <!--{{rating_form.type.as_hidden}}-->
+            </div>
+            <button class="btn btn-primary" type="submit" name="submit-rating">Submit</button>
+        </form>
+        <h1>
+            or
+        </h1>
+        <form class="form" id="form2" action = "" method = "POST">
+            {%csrf_token%}
+            <label for="rating">Enter your username</label>
+            <div class="form-group">
+                {{handle_form.username}}
+                <!--{{handle_form.type.as_hidden}}-->
+            </div>
+            <button class="btn btn-primary" type="submit" name="submit-handle">Submit</button>
+        </form>
+    </div>
     {%if load_type == 'error'%}
         <div>
             {{message}}
@@ -29,13 +34,14 @@
     {%endif%}
     {%if load_type == 'handle' or load_type == 'rating'%}
         {%if load_type == 'handle'%}
-        <div class="username">
+        <div class="rating_color">
             {{username}},
         </div>
         {%endif%}
-        <div>
-            Your rating is {{rating}}
+        <div style="display: inline;">
+            Your rating is
         </div>
+        <p style="display: inline;" class="rating_color"> {{rating}}</p>
         <div>
             You are better than {{percent_worse}}% of all contestants
         </div>

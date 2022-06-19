@@ -24,4 +24,8 @@ document.addEventListener('click', event =>{
             })
         }
     )
+    .then( () => {
+        color_rated = document.querySelectorAll('.rating_color')
+        console.log(color_rated)    
+    })
 })
