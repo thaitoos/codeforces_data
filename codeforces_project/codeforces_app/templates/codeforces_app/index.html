@@ -50,5 +50,34 @@
             Your rating is {{distance_to_average}} points {%if above %}above{%endif%}{%if not above %}below{%endif%} average
         </div>
     {%endif%}
-  
+    <script>
+        function rating_to_color(rating){
+            if(rating<1200){
+                return '#B5AFAF'
+                //return '#66FF66'
+            }
+            if(rating<1400){
+                return '#66FF66'
+            }
+            if(rating<1600){
+                return '#66FFFF'
+            }
+            if(rating<1900){
+                return '#0000FF'
+            }
+            if(rating<2100){
+                return '#FF33FF'
+            }
+            if(rating<2400){
+                return '#FFFF33'
+            }
+            return '#FF3333'
+        };
+        colored = document.querySelectorAll('.rating_color')
+        console.log(colored)
+        colored.forEach(element => {
+            //element.style.color = rating_to_color(color_to_rating({{rating}}));
+            element.style.color = 'red'
+        });        
+    </script>
 {%endblock%}
