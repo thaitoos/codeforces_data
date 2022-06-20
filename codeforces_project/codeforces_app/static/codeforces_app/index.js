@@ -1,31 +1,43 @@
-var body = document.querySelector('body')
-var get_stats = document.querySelector('#get_stats')
-document.addEventListener('click', event =>{
-    var data = 'jd';
-    fetch('https://codeforces.com/api/user.ratedList?activeOnly=true&includeRetired=false')
-    .then(response => response.json())
-    .then(result => {
-        console.log(result['result'][0]['rating']);
-        console.log('success');
-        data=result['result'];
-        console.log(data);
-    })
-    .then( () =>{
-            fetch('/codeforces_app/get_stats?' + new URLSearchParams({
-                'data': data
-            }))
-            .then(response => response.json())
-            .then(result => {
-                result.forEach(element => {
-                    const new_div = document.createElement('div');
-                    new_div.innerHTML = element;
-                    body.append(new_div);
-                });
-            })
+document.addEventListener('DOMContentLoaded', () => {
+    function rating_to_color(rating){
+        if(rating<1200){
+            return '#B5AFAF'
+            //return '#66FF66'
         }
-    )
-    .then( () => {
-        color_rated = document.querySelectorAll('.rating_color')
-        console.log(color_rated)    
+        if(rating<1400){
+            return '#66FF66'
+        }
+        if(rating<1600){
+            return '#66FFFF'
+        }
+        if(rating<1900){
+            return '#0000FF'
+        }
+        if(rating<2100){
+            return '#FF33FF'
+        }
+        if(rating<2400){
+            return '#FFFF33'
+        }
+        return '#FF3333'
+    };
+    colored = document.querySelectorAll('.rating_color')
+    if(colored.length >0){
+        console.log(colored)
+        let rating = JSON.parse(document.getElementById('rating').textContent)
+        colored.forEach(element => {
+            //element.style.color = rating_to_color(color_to_rating({{rating}}));
+            //element.style.color = 'red'
+            element.style.color = rating_to_color(rating);//convert hex to color
+            //element.style.display = 'flex';
+            //element.style.justifyContent = 'center';
+        });   
+    }
+    resp = document.querySelectorAll('.response')
+    console.log({"xd": resp})
+    resp.forEach(element => {
+        element.style.display = 'flex';
+        element.style.justifyContent = 'center';
+        element.style.fontSize= 'larger';
     })
-})
+})  

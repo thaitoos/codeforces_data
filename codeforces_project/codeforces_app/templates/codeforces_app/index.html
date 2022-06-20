@@ -33,24 +33,26 @@
         </div>
     {%endif%}
     {%if load_type == 'handle' or load_type == 'rating'%}
-        {%if load_type == 'handle'%}
-        <div class="rating_color">
-            {{username}},
-        </div>
-        {%endif%}
-        <div style="display: inline;">
-            Your rating is
-        </div>
-        <p style="display: inline;" class="rating_color"> {{rating}}</p>
-        <div>
-            You are better than {{percent_worse}}% of all contestants
-        </div>
-        <!--{{contestants_worse}}-->
-        <div>
-            Your rating is {{distance_to_average}} points {%if above %}above{%endif%}{%if not above %}below{%endif%} average
+        <div class = 'response_container'>
+            {%if load_type == 'handle'%}
+            <div class="rating_color response">
+                {{username}},
+            </div>
+            {%endif%}
+            <div style="display: inline;" class="response">
+                Your rating is
+            </div>
+            <p style="display: inline;" class="rating_color response"> {{rating}}</p>
+            <div class="response">
+                You are better than {{percent_worse}}% of all contestants
+            </div>
+            <!--{{contestants_worse}}-->
+            <div class='response'>
+                Your rating is {{distance_to_average}} points {%if above %}above{%endif%}{%if not above %}below{%endif%} average
+            </div>
         </div>
     {%endif%}
-    <script>
+    <!--<script>
         function rating_to_color(rating){
             if(rating<1200){
                 return '#B5AFAF'
@@ -79,5 +81,10 @@
             //element.style.color = rating_to_color(color_to_rating({{rating}}));
             element.style.color = 'red'
         });        
-    </script>
+    </script>-->
+    {{rating|json_script:"rating"}}
+{% endblock %}
+{%block script%}
+    {%load static%}
+    <script src = "{%static 'codeforces_app/index.js'%}"></script>
 {%endblock%}
