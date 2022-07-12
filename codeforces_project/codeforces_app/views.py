@@ -32,7 +32,7 @@ def get_contestant_place(rating:int, size: int):#returns number of cotestant wit
     return l-1
 
 
-def index(request):
+def profile_info(request):
     if request.method == 'POST':
         if "submit-handle" in request.POST:
             form = HandleForm(request.POST)
@@ -42,7 +42,7 @@ def index(request):
                 if not Contestant.objects.filter(handle = handle).exists():
                     rating_form = RatingForm()
                     handle_form = HandleForm()
-                    return render(request, "codeforces_app/index.html", {
+                    return render(request, "codeforces_app/profile_info.html", {
                         'rating_form' : rating_form,
                         'handle_form': handle_form,
                         'load_type': 'error',
@@ -59,7 +59,7 @@ def index(request):
                 rating_form = RatingForm()
                 handle_form = HandleForm()
                 username = contestant.handle_with_case
-                return render(request, "codeforces_app/index.html", {
+                return render(request, "codeforces_app/profile_info.html", {
                     'rating_form' : rating_form,
                     'handle_form': handle_form,
                     'load_type': 'handle',
@@ -73,7 +73,7 @@ def index(request):
             else:
                 rating_form = RatingForm()
                 handle_form = HandleForm()
-                return render(request, "codeforces_app/index.html", {
+                return render(request, "codeforces_app/profile_info.html", {
                     'rating_form' : rating_form,
                     'handle_form': handle_form,
                     'load_type': 'error',
@@ -87,7 +87,7 @@ def index(request):
                 if rating < -200 or rating > 4500:
                     rating_form = RatingForm()
                     handle_form = HandleForm()
-                    return render(request, "codeforces_app/index.html", {
+                    return render(request, "codeforces_app/profile_info.html", {
                         'rating_form' : rating_form,
                         'handle_form': handle_form,
                         'load_type': 'error',
@@ -102,7 +102,7 @@ def index(request):
                 above = rating > average
                 rating_form = RatingForm()
                 handle_form = HandleForm()
-                return render(request, "codeforces_app/index.html", {
+                return render(request, "codeforces_app/profile_info.html", {
                     'rating_form' : rating_form,
                     'handle_form': handle_form,
                     'load_type': 'rating',
@@ -115,7 +115,7 @@ def index(request):
             else:
                 rating_form = RatingForm()
                 handle_form = HandleForm()
-                return render(request, "codeforces_app/index.html", {
+                return render(request, "codeforces_app/profile_info.html", {
                     'rating_form' : rating_form,
                     'handle_form': handle_form,
                     'load_type': 'error',
@@ -124,7 +124,7 @@ def index(request):
 
     rating_form = RatingForm()
     handle_form = HandleForm()
-    return render(request, "codeforces_app/index.html", {
+    return render(request, "codeforces_app/profile_info.html", {
         'rating_form' : rating_form,
         'handle_form': handle_form,
     })
@@ -173,4 +173,5 @@ def show(request):
         'json_percentiles' : json_percentiles,
         'average' : Data.objects.get(name = 'average').value
     })
-
+def index(request):
+    return profile_info(request)
