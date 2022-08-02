@@ -33,7 +33,8 @@
         </div>
     {%endif%}
     {%if load_type == 'handle' or load_type == 'rating'%}
-        <div class = 'response_container'>
+        {{ username|json_script:"username" }}
+        <div id = 'main' class = 'response_container'>
             {%if load_type == 'handle'%}
             <div class="rating_color response">
                 {{username}},
@@ -51,6 +52,10 @@
                 Your rating is {{distance_to_average}} points {%if above %}above{%endif%}{%if not above %}below{%endif%} average
             </div>
         </div>
+    {%endif%}
+    {%if load_type == 'handle'%}
+        <div id='extra1'></div>
+        <div id='extra2'></div>
     {%endif%}
     <!--<script>
         function rating_to_color(rating){
@@ -87,4 +92,5 @@
 {%block script%}
     {%load static%}
     <script src = "{%static 'codeforces_app/index.js'%}"></script>
+    <script type="text/babel" src = "{%static 'codeforces_app/index.jsx'%}"></script>
 {%endblock%}

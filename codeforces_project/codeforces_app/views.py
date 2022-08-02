@@ -51,7 +51,7 @@ def profile_info(request):
                 contestant = Contestant.objects.get(handle = handle)
                 size = int(Data.objects.get(name = 'size').value)
                 average = float(Data.objects.get(name = 'average').value)
-                contestants_worse = get_contestant_place(contestant.rating, size)
+                contestants_worse = size - contestant.index
                 percent_worse = round(contestants_worse*100/size,2)
                 distance_to_average = abs(contestant.rating - average)
                 distance_to_average = round(distance_to_average,2)# rounding behaves weirdly
@@ -95,7 +95,7 @@ def profile_info(request):
                     })
                 size = int(Data.objects.get(name = 'size').value)
                 average = float(Data.objects.get(name = 'average').value)
-                contestants_worse = get_contestant_place(rating, size)
+                contestants_worse =  size - get_contestant_place(rating,size) #get_contestant_place(rating, size)
                 percent_worse = round(contestants_worse*100/size,2)
                 distance_to_average = abs(rating - average)
                 distance_to_average = round(distance_to_average,2)# rounding behaves weirdly
@@ -132,7 +132,7 @@ def profile_info(request):
 
 #@staff_member_required
 def get_stats(request):
-    data = requests.get('https://codeforces.com/api/user.ratedList')
+    data = requests.get('https://codeforces.com/api/user.ratedList?activeOnly=false&includeRetired=true')
     if(data.status_code!=200):
         return
     data = data.json() # its already a json file ????
