@@ -11,14 +11,24 @@ function App() {
         console.log('frst');
     })
     .then(()=>{
-    console.log('yhhhhh')
-    return (
-        <div>
-            yuh
-        </div>
-    );
+        console.log('yhhhhh')
+        //return (
+        //    <div>
+        //        yuh
+        //    </div>
+        //);
+        function Load(){
+            return(
+                <div>
+                    yuh
+                </div>
+            )
+        };
+        var main = document.querySelector("#extra1")
+        if(typeof(main) != 'undefined' && main != null)ReactDOM.render(<Load />, main);
     }
     )
 }
-var main = document.querySelector("#main")
-if(typeof(main) != 'undefined' && main != null)ReactDOM.render(<App />, extra1);
+//var main = document.querySelector("#extra1")
+//if(typeof(main) != 'undefined' && main != null)ReactDOM.render(<App />, main);
+App();
