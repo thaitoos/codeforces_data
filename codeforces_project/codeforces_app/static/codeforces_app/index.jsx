@@ -9,25 +9,17 @@ function App() {
         }
         var s1=JSON.stringify(data['result']);
         console.log('frst');
-    })
-    .then(()=>{
         console.log('yhhhhh')
-        //return (
-        //    <div>
-        //        yuh
-        //    </div>
-        //);
         function Load(){
             return(
                 <div>
-                    yuh
+                    {s1}
                 </div>
             )
         };
         var main = document.querySelector("#extra1")
         if(typeof(main) != 'undefined' && main != null)ReactDOM.render(<Load />, main);
-    }
-    )
+    })
 }
 //var main = document.querySelector("#extra1")
 //if(typeof(main) != 'undefined' && main != null)ReactDOM.render(<App />, main);
