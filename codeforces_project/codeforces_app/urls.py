@@ -6,4 +6,5 @@ urlpatterns = [
     path("get_stats",views.get_stats,name='get_stats'),
     path("profile_info",views.profile_info, name="profile_info"),
     path("show",views.show, name="show"),
+    path("compare",views.compare, name="compare"),
 ]

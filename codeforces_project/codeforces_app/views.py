@@ -175,3 +175,5 @@ def show(request):
     })
 def index(request):
     return profile_info(request)
+def compare(request):
+    return render(request, "codeforces_app/compare.html")
