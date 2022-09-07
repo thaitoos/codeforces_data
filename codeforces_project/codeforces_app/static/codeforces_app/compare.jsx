@@ -1,7 +1,30 @@
+function rating_to_color(rating){
+    if(rating<1200){
+        return '#B5AFAF'
+        //return '#66FF66'
+    }
+    if(rating<1400){
+        return '#66FF66'
+    }
+    if(rating<1600){
+        return '#66FFFF'
+    }
+    if(rating<1900){
+        return '#0000FF'
+    }
+    if(rating<2100){
+        return '#FF33FF'
+    }
+    if(rating<2400){
+        return '#FFFF33'
+    }
+    return '#FF3333'
+};
 function List() {
     const [list,setList] = React.useState([]);
     const [input,setInput] = React.useState("");
     const [idctr,setIdctr] = React.useState(0);
+    const [loadButtonDisabled, setLoadButtonDisabled] = React.useState(true);
     const max_contestant_count = 5;
     const divError = document.querySelector("#error");
     const clearError = function(){
@@ -11,38 +34,49 @@ function List() {
         divError.innerHTML = message;
     }
     const fetchData = async(contestant) => {
-        console.log("fetchn");
+        //console.log("fetchn");
         try{
-            const [respTodoOne, respTodoTwo, respTodoThree] = await Promise.all([
+            const addButton = document.querySelector("#addButton");
+            addButton.disabled = true;
+            const [respCallOne, respCallTwo, respCallThree] = await Promise.all([
                 fetch(`https://codeforces.com/api/user.info?handles=${contestant}`),
                 fetch(`https://codeforces.com/api/user.rating?handle=${contestant}`),
                 fetch(`https://codeforces.com/api/user.status?handle=${contestant}&from=1&count=50000`)
             ]);
-            const todoOne = await respTodoOne.json();
-            const todoTwo = await respTodoTwo.json();
-            const todoThree = await respTodoThree.json();
-            if((todoOne["status"]!="OK") || (todoTwo["status"]!="OK") || (todoThree["status"]!="OK")){
+            const CallOne = await respCallOne.json();
+            const CallTwo = await respCallTwo.json();
+            const CallThree = await respCallThree.json();
+            console.log({1:CallOne});
+            console.log({2:CallTwo});
+            console.log({3:CallThree});
+            if((CallOne["status"]!="OK") || (CallTwo["status"]!="OK") || (CallThree["status"]!="OK")){
+                addButton.disabled = false;
                 throwError("incorrect contestant");
                 return;
             }
             console.log("DONE");
-            const rating = todoOne["result"][0]["rating"];
+            const rating = CallOne["result"][0]["rating"];
+            const maxRating = CallOne["result"][0]["maxRating"]
             console.log({"rating" : rating});
             const newContestant = {
                 id: idctr,
                 contestant: contestant,
                 rating: rating,
-                todoOne: todoOne,
-                todoTwo: todoTwo,
-                todoThree: todoThree
+                maxRating: maxRating,
+                CallOne: CallOne,
+                CallTwo: CallTwo,
+                CallThree: CallThree
+            }
+            addButton.disabled = false;
+            if(list.length+1>=2){
+                //document.querySelector("#loadButton").disabled = false;
+                setLoadButtonDisabled(false);
             }
             setList([...list, newContestant]);
             setInput("");
-            //console.log(todoOne, 'todoOne');
-            //console.log(todoTwo, 'todoTwo');
-            //console.log(todoThree, 'todoThree');
         }
         catch(err){
+            addButton.disabled = false;
             console.log(err);
             return err;
         }
@@ -73,7 +107,6 @@ function List() {
     };
     const addContestant = (contestant) => {
         setIdctr(idctr + 1);
-        console.log({"fm":"fm"});
         // CHECK IF USERNAME IS OK
         /*fetch(`https://codeforces.com/api/user.info?handles=${contestant}`)
         .then(response =>response.json())
@@ -96,11 +129,61 @@ function List() {
         fetchData(contestant);
     };
     const deleteContestant = (id) => {
+        console.log(id);
         clearError();
+        if(!(list.length-1>=2)){
+            //document.querySelector("#loadButton").disabled = true;
+            setLoadButtonDisabled(true);
+        }
         const newList = list.filter((contestant)=>contestant.id !== id);
         setList(newList);
     }
-
+    function Ratings(){
+        const ratingList = list.map(function(contestant){
+            return [contestant.rating, contestant.maxRating, contestant.contestant];
+        })
+        ratingList.sort()
+        ratingList.reverse();
+        return(
+            <div>
+                <ul>
+                {
+                    ratingList.map((item,index)=>(
+                        <li>
+                            {`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`}
+                        </li>
+                    ))
+                }
+                </ul>
+            </div>
+        )
+    }
+    function RenderResult() {
+        console.log("TWO");
+        //charts in a separate div?
+        return(
+            <div>
+                <h1>rating:</h1>
+                <Ratings/>
+            </div>
+        )
+        //return(
+        //    <div>
+        //        xd
+        //    </div>
+        //)
+    }
+    const handleLoadResult = () => {
+        console.log("loading");
+        clearError();
+        if(!(list.length >=2)){
+            throwError("add at least 2 contestants to compare");
+            return;
+        }
+        var targetDiv = document.querySelector("#div2");
+        console.log("ONE");
+        ReactDOM.render(<RenderResult />, targetDiv);
+    }
     //VALIDATION
     return(
         <div>
@@ -111,16 +194,17 @@ function List() {
                     value = {input}
                     onChange = {(event) => setInput(event.target.value)}
                 />
-                <button type="submit">Add</button>
+                <button id = {"addButton"} type="submit">Add</button>
             </form>
             <ul>
                 {list.map((contestant) => (
-                    <li>
+                    <li style = {{color: rating_to_color(contestant.rating)}}>
                         {`${contestant.contestant} ${contestant.rating}`}
                         <button onClick={()=>deleteContestant(contestant.id)}>&times;</button>
                     </li>
                 ))}
             </ul>
+            <button id = {"loadButton"} onClick = {()=>handleLoadResult()} disabled = {loadButtonDisabled}>compare</button>
         </div>
     );
 }
