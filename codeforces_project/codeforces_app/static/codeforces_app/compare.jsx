@@ -107,25 +107,6 @@ function List() {
     };
     const addContestant = (contestant) => {
         setIdctr(idctr + 1);
-        // CHECK IF USERNAME IS OK
-        /*fetch(`https://codeforces.com/api/user.info?handles=${contestant}`)
-        .then(response =>response.json())
-        .then(result => {
-            console.log({"status": result["status"] });
-            if(result["status"]!=="OK"){//inputContestant already in List
-                divError.innerHTML = `Incorrect contestant`;
-                return;
-            }
-            let rating = result['result'][0]['rating'];
-            console.log({"rating" : rating});
-            const newContestant = {
-                id: idctr,
-                contestant: contestant,
-                rating: rating
-            }
-            setList([...list, newContestant]);
-            setInput("");
-        })*/
         fetchData(contestant);
     };
     const deleteContestant = (id) => {
@@ -138,40 +119,131 @@ function List() {
         const newList = list.filter((contestant)=>contestant.id !== id);
         setList(newList);
     }
-    function Ratings(){
-        const ratingList = list.map(function(contestant){
-            return [contestant.rating, contestant.maxRating, contestant.contestant];
-        })
-        ratingList.sort()
-        ratingList.reverse();
-        return(
-            <div>
-                <ul>
-                {
-                    ratingList.map((item,index)=>(
-                        <li>
-                            {`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`}
-                        </li>
-                    ))
-                }
-                </ul>
-            </div>
-        )
-    }
+
+
+
     function RenderResult() {
         console.log("TWO");
         //charts in a separate div?
+        const ratingList = list.map(function(contestant){
+            return [contestant.rating, contestant.maxRating, contestant.contestant];
+        })
+        ratingList.sort();
+        ratingList.reverse();
+        const contestNumList = list.map(function(contestant){
+            return [contestant.CallTwo["result"].length, contestant.contestant];
+        })
+        contestNumList.sort();
+        contestNumList.reverse();
+        const allSubmissionList = list.map(function(contestant){
+            return [contestant.CallThree["result"].length, contestant.contestant];
+        })
+        allSubmissionList.sort();
+        allSubmissionList.reverse();
+        const submissionRatioList = list.map(function(contestant){
+            var allSubmissons = contestant.CallThree["result"].length;
+            var acceptedSubmissions = contestant.CallThree["result"].filter(contest => contest["verdict"] == "OK").length;
+            //var acceptedSubmissions = 1000;
+            var percentage = acceptedSubmissions * 100.0 / allSubmissons;
+            return [percentage.toFixed(1),acceptedSubmissions,allSubmissons,contestant.contestant]; 
+        })
+        submissionRatioList.sort();
+        submissionRatioList.reverse();
+        const series = [
+        {
+            name: "Temperature in Fahrenheit", //will be displayed on the y-axis
+            data: [43, 53, 50, 57]
+        }
+        ];
+        const options = {
+        chart: {
+            id: "simple-bar"
+        },
+        xaxis: {
+            categories: [1, 2, 3, 4] //will be displayed on the x-asis
+        }
+        };
+        function Graph(){
+            var divreturn = React.createElement('div');
+            var chart = new ApexCharts(divreturn, options);
+            chart.render();
+            return divreturn;
+        }
         return(
             <div>
-                <h1>rating:</h1>
-                <Ratings/>
+                <h1>rating</h1>
+                {/*<Ratings/>*/}
+                <div style={{display:'flex', flexFlow:'row wrap'}}>
+                    {
+                        ratingList.map((item,index)=>(
+                            <div className='card'>
+                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
+                                <h5>{`${index+1}.`}</h5>
+                                <h1>{`${item[2]}`}</h1>
+                                <h2>{`${item[0]}`}</h2>
+                                <h2>{`(Max. ${item[1]})`}</h2>
+                            </div>
+                        ))
+                    }   
+                </div>
+                {/*rating over time HERE*/}
+                <h1>Experience</h1>
+                <h2> number of contests participations</h2>
+                <div style={{display:'flex', flexFlow:'row wrap'}}>
+                    {
+                        contestNumList.map((item,index)=>(
+                            <div className='card'>
+                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
+                                <h5>{`${index+1}.`}</h5>
+                                <h1>{`${item[1]}`}</h1>
+                                <h2>{`${item[0]}`}</h2>
+                            </div>
+                        ))
+                    }
+                </div>
+                <h2> number of all submissions</h2>
+                <div style={{display:'flex', flexFlow:'row wrap'}}>
+                    {
+                        allSubmissionList.map((item,index)=>(
+                            <div className='card'>
+                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
+                                <h5>{`${index+1}.`}</h5>
+                                <h1>{`${item[1]}`}</h1>
+                                <h2>{`${item[0]}`}</h2>
+                            </div>
+                        ))
+                    }
+                </div>
+                <h1>Correctness</h1>
+                <h3>percentage of accepted submissions</h3>
+                <div style={{display:'flex', flexFlow:'row wrap'}}>
+                    {
+                        submissionRatioList.map((item,index)=>(
+                            <div className='card'>
+                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
+                                <h5>{`${index+1}.`}</h5>
+                                <h1>{`${item[3]}`}</h1>
+                                <h2>{`${item[0]}%`}</h2>
+                                {/*<div style={{display:'inline'}}>
+                                    <h4>accepted submissions:</h4>
+                                    <h2>{`${item[1]}`}</h2>
+                                </div>
+                                <div style={{display:'inline'}}>
+                                    <h4>all submissions:</h4>
+                                    <h2>{`${item[2]}`}</h2>
+                                 </div>*/}
+                                <div>
+                                    {
+                                        `${item[1]} out of ${item[2]} submissions are correct`
+                                    }
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+                <Graph/>
             </div>
         )
-        //return(
-        //    <div>
-        //        xd
-        //    </div>
-        //)
     }
     const handleLoadResult = () => {
         console.log("loading");
