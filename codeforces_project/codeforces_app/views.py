@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from numpy import average
 import requests
 from codeforces_app.models import Contestant, Data
 from django.contrib.admin.views.decorators import staff_member_required
@@ -47,6 +48,7 @@ def profile_info(request):
                         'handle_form': handle_form,
                         'load_type': 'error',
                         'message': 'invalid username(new or inactive accounts may be unavailable)',
+                        'average' : Data.objects.get(name = 'average').value,
                     })
                 contestant = Contestant.objects.get(handle = handle)
                 size = int(Data.objects.get(name = 'size').value)
@@ -69,6 +71,7 @@ def profile_info(request):
                     'above': above,
                     'rating': contestant.rating,
                     'username': username,
+                    'average' : Data.objects.get(name = 'average').value,
                 })
             else:
                 rating_form = RatingForm()
@@ -111,6 +114,7 @@ def profile_info(request):
                     'distance_to_average': distance_to_average,
                     'above': above,
                     'rating': rating,
+                    'average' : Data.objects.get(name = 'average').value,
                 })
             else:
                 rating_form = RatingForm()
@@ -174,6 +178,6 @@ def show(request):
         'average' : Data.objects.get(name = 'average').value
     })
 def index(request):
-    return profile_info(request)
+    return compare(request)
 def compare(request):
     return render(request, "codeforces_app/compare.html")

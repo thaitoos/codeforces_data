@@ -1,7 +1,9 @@
 {% extends "codeforces_app/layout.html" %}
 <!-- enter your handle or rating and get top% and how far you are from average-->
 {%block body%}
-
+    <div>
+        {{average}}
+    </div>
     <!-- the average rating is {{average}} -->
     <div class="forms_container">
         <form class="form" id="form1" action = "" method = "POST">
@@ -34,6 +36,8 @@
     {%endif%}
     {%if load_type == 'handle' or load_type == 'rating'%}
         {{ username|json_script:"username" }}
+        {{ average|json_script:"average" }}
+        {%if load_type == 'rating'%}
         <div id = 'main' class = 'response_container'>
             {%if load_type == 'handle'%}
             <div class="rating_color response">
@@ -52,6 +56,7 @@
                 Your rating is {{distance_to_average}} points {%if above %}above{%endif%}{%if not above %}below{%endif%} average
             </div>
         </div>
+        {%endif%}
     {%endif%}
     {%if load_type == 'handle'%}
         <div id='extra1'></div>
@@ -88,6 +93,12 @@
         });        
     </script>-->
     {{rating|json_script:"rating"}}
+    <div id="jsx1">
+    </div>
+    <div id="jsx2">
+    </div>
+    <div id="jsx3">
+    </div>
 {% endblock %}
 {%block script%}
     {%load static%}

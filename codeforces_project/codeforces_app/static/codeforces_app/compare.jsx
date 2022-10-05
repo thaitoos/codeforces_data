@@ -121,54 +121,12 @@ function List() {
     }
 
 
-
     function RenderResult() {
-        console.log("TWO");
-        //charts in a separate div?
         const ratingList = list.map(function(contestant){
             return [contestant.rating, contestant.maxRating, contestant.contestant];
         })
         ratingList.sort();
         ratingList.reverse();
-        const contestNumList = list.map(function(contestant){
-            return [contestant.CallTwo["result"].length, contestant.contestant];
-        })
-        contestNumList.sort();
-        contestNumList.reverse();
-        const allSubmissionList = list.map(function(contestant){
-            return [contestant.CallThree["result"].length, contestant.contestant];
-        })
-        allSubmissionList.sort();
-        allSubmissionList.reverse();
-        const submissionRatioList = list.map(function(contestant){
-            var allSubmissons = contestant.CallThree["result"].length;
-            var acceptedSubmissions = contestant.CallThree["result"].filter(contest => contest["verdict"] == "OK").length;
-            //var acceptedSubmissions = 1000;
-            var percentage = acceptedSubmissions * 100.0 / allSubmissons;
-            return [percentage.toFixed(1),acceptedSubmissions,allSubmissons,contestant.contestant]; 
-        })
-        submissionRatioList.sort();
-        submissionRatioList.reverse();
-        const series = [
-        {
-            name: "Temperature in Fahrenheit", //will be displayed on the y-axis
-            data: [43, 53, 50, 57]
-        }
-        ];
-        const options = {
-        chart: {
-            id: "simple-bar"
-        },
-        xaxis: {
-            categories: [1, 2, 3, 4] //will be displayed on the x-asis
-        }
-        };
-        function Graph(){
-            var divreturn = React.createElement('div');
-            var chart = new ApexCharts(divreturn, options);
-            chart.render();
-            return divreturn;
-        }
         return(
             <div>
                 <h1>rating</h1>
@@ -186,14 +144,36 @@ function List() {
                         ))
                     }   
                 </div>
-                {/*rating over time HERE*/}
+            </div>
+        )
+    }
+    function RenderResult2() {
+        const contestNumList = list.map(function(contestant){
+            return [contestant.CallTwo["result"].length, contestant.contestant];
+        })
+        contestNumList.sort();
+        contestNumList.reverse();
+        const allSubmissionList = list.map(function(contestant){
+            return [contestant.CallThree["result"].length, contestant.contestant];
+        })
+        allSubmissionList.sort();
+        allSubmissionList.reverse();
+        const submissionRatioList = list.map(function(contestant){
+            var allSubmissons = contestant.CallThree["result"].length;
+            var acceptedSubmissions = contestant.CallThree["result"].filter(contest => contest["verdict"] == "OK").length;
+            var percentage = acceptedSubmissions * 100.0 / allSubmissons;
+            return [percentage.toFixed(1),acceptedSubmissions,allSubmissons,contestant.contestant]; 
+        })
+        submissionRatioList.sort();
+        submissionRatioList.reverse();
+        return(
+            <div>
                 <h1>Experience</h1>
                 <h2> number of contests participations</h2>
                 <div style={{display:'flex', flexFlow:'row wrap'}}>
                     {
                         contestNumList.map((item,index)=>(
                             <div className='card'>
-                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
                                 <h5>{`${index+1}.`}</h5>
                                 <h1>{`${item[1]}`}</h1>
                                 <h2>{`${item[0]}`}</h2>
@@ -206,7 +186,6 @@ function List() {
                     {
                         allSubmissionList.map((item,index)=>(
                             <div className='card'>
-                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
                                 <h5>{`${index+1}.`}</h5>
                                 <h1>{`${item[1]}`}</h1>
                                 <h2>{`${item[0]}`}</h2>
@@ -220,18 +199,9 @@ function List() {
                     {
                         submissionRatioList.map((item,index)=>(
                             <div className='card'>
-                                {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
                                 <h5>{`${index+1}.`}</h5>
                                 <h1>{`${item[3]}`}</h1>
                                 <h2>{`${item[0]}%`}</h2>
-                                {/*<div style={{display:'inline'}}>
-                                    <h4>accepted submissions:</h4>
-                                    <h2>{`${item[1]}`}</h2>
-                                </div>
-                                <div style={{display:'inline'}}>
-                                    <h4>all submissions:</h4>
-                                    <h2>{`${item[2]}`}</h2>
-                                 </div>*/}
                                 <div>
                                     {
                                         `${item[1]} out of ${item[2]} submissions are correct`
@@ -241,9 +211,110 @@ function List() {
                         ))
                     }
                 </div>
-                <Graph/>
             </div>
         )
+    }
+    function RenderResult1(){
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Oct'];
+        var d = new Date();
+        var month = d.getMonth();
+        var year = d.getFullYear();
+        var yearandmonths = [];
+        var numofmonths = 24;
+        for(var i=0;i<numofmonths;i++){
+            yearandmonths.push([month, year]);
+            month--;
+            if(month<0){
+                month=11;
+                year--;
+            }
+        }
+        yearandmonths.reverse();
+        const contestantPoints = [];
+        list.forEach((contestant) => {
+            const res = [];
+            for(var i=0;i<=numofmonths;i++){
+                res.push(0);
+            }
+            contestant["CallTwo"]["result"].forEach((contest) => {
+                var date = new Date(contest["ratingUpdateTimeSeconds"] * 1000);
+                var contestMonth = date.getMonth();
+                var contestYear = date.getFullYear();
+                var used = false;
+                for(var i=0;i<yearandmonths.length;i++){
+                    if(yearandmonths[i][0]==contestMonth && yearandmonths[i][1]==contestYear){
+                        console.log("LETS GO");
+                        res[i+1]=Math.max(res[i+1],contest["newRating"]);
+                        used = true;
+                        break;
+                    }
+                }
+                if(!used){
+                    res[0]=Math.max(res[0],contest["newRating"]);
+                }
+            })
+            for(var i=1;i<res.length;i++){
+                if(res[i]==0){
+                    res[i]=res[i-1];
+                }    
+            }
+            contestantPoints.push(res);
+        })
+        var categories = [];
+        categories.push("...");
+        yearandmonths.forEach((object) => {
+            categories.push(`${months[object[0]]} ${object[1].toString().slice(2)}`);
+        })
+        var series = [];
+        for(var i=0;i<list.length;i++){
+            series.push({"name" : list[i].contestant, "data" : contestantPoints[i]});
+        }
+        console.log(series);
+        var options = {
+            series: series,
+            chart: {
+            type: 'bar',
+            height: 350
+          },
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '55%',
+              endingShape: 'rounded'
+            },
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+          },
+          xaxis: {
+            categories: categories,
+          },
+          yaxis: {
+            title: {
+              text: '$ (thousands)'
+            }
+          },
+          fill: {
+            opacity: 1
+          },
+          tooltip: {
+            y: {
+              formatter: function (val) {
+                return "$ " + val + " thousands"
+              }
+            }
+          }
+          };
+        var divreturn = document.querySelector('#div3');
+        console.log(divreturn);
+        var chart = new ApexCharts(divreturn, options);
+        chart.render();
+        return divreturn;
     }
     const handleLoadResult = () => {
         console.log("loading");
@@ -253,8 +324,11 @@ function List() {
             return;
         }
         var targetDiv = document.querySelector("#div2");
+        var targetDiv2 = document.querySelector("#div4");
         console.log("ONE");
         ReactDOM.render(<RenderResult />, targetDiv);
+        RenderResult1();
+        ReactDOM.render(<RenderResult2 />, targetDiv2);
     }
     //VALIDATION
     return(
