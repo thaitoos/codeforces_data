@@ -1,7 +1,6 @@
 function rating_to_color(rating){
     if(rating<1200){
         return '#B5AFAF'
-        //return '#66FF66'
     }
     if(rating<1400){
         return '#66FF66'
@@ -127,6 +126,7 @@ function List() {
         })
         ratingList.sort();
         ratingList.reverse();
+
         return(
             <div>
                 <h1>rating</h1>
@@ -138,8 +138,8 @@ function List() {
                                 {/*`${index+1}. ${item[2]} ${item[0]} (Max. ${item[1]})`*/}
                                 <h5>{`${index+1}.`}</h5>
                                 <h1>{`${item[2]}`}</h1>
-                                <h2>{`${item[0]}`}</h2>
-                                <h2>{`(Max. ${item[1]})`}</h2>
+                                <h2 className="colored">{`${item[0]}`}</h2>
+                                <h2 className="colored">{`(Max. ${item[1]})`}</h2>
                             </div>
                         ))
                     }   
@@ -296,7 +296,7 @@ function List() {
           },
           yaxis: {
             title: {
-              text: '$ (thousands)'
+              text: 'rating'
             }
           },
           fill: {
@@ -305,7 +305,7 @@ function List() {
           tooltip: {
             y: {
               formatter: function (val) {
-                return "$ " + val + " thousands"
+                return val;
               }
             }
           }
@@ -317,7 +317,6 @@ function List() {
         return divreturn;
     }
     const handleLoadResult = () => {
-        console.log("loading");
         clearError();
         if(!(list.length >=2)){
             throwError("add at least 2 contestants to compare");
@@ -329,6 +328,24 @@ function List() {
         ReactDOM.render(<RenderResult />, targetDiv);
         RenderResult1();
         ReactDOM.render(<RenderResult2 />, targetDiv2);
+        const ratingColorElements = document.getElementsByClassName("colored");
+        for (let i = 0; i < ratingColorElements.length; i++) {
+          let rating = ratingColorElements[i].innerText;
+          if(rating[0]=='('){
+            rating = rating.slice(6);
+            rating = rating.slice(0, -1);
+          }
+          ratingColorElements[i].style.color = rating_to_color(rating);
+        }
+        const cardElements = document.getElementsByClassName("card");
+        for (let i = 0; i < cardElements.length; i++) {
+            cardElements[i].style.backgroundColor = "#f5f5f5";
+            cardElements[i].style.padding = "10px";
+            cardElements[i].style.margin = "10px";
+            cardElements[i].style.borderRadius = "10px";
+            cardElements[i].style.boxShadow = "0px 0px 10px 0px rgba(0,0,0,0.5)";
+        }
+
     }
     //VALIDATION
     return(
@@ -344,14 +361,16 @@ function List() {
             </form>
             <ul>
                 {list.map((contestant) => (
-                    <li style = {{color: rating_to_color(contestant.rating)}}>
-                        {`${contestant.contestant} ${contestant.rating}`}
+                    //<li style = {{color: rating_to_color(contestant.rating)}}>
+                    <li>
+                        {`${contestant.contestant}`}
                         <button onClick={()=>deleteContestant(contestant.id)}>&times;</button>
                     </li>
                 ))}
             </ul>
             <button id = {"loadButton"} onClick = {()=>handleLoadResult()} disabled = {loadButtonDisabled}>compare</button>
         </div>
+        
     );
 }
 var div1 = document.querySelector("#div1");

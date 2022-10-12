@@ -29,14 +29,32 @@ document.addEventListener('DOMContentLoaded', function(){
     labels = [];
     values = [];
     colors = [];
-    for(let key = 1; key<=99; key+=2){
+    //console.log(window.screen.width);
+    //get window width
+    let windowWidth = window.innerWidth
+    if(windowWidth <= 1600){
+        for(let key = 1; key<=99; key+=4){
+            labels.push(key)
+            values.push(json_percentiles[key])
+            colors.push(rating_to_color(json_percentiles[key].toString()));
+        }
+        let key=99;
         labels.push(key)
         values.push(json_percentiles[key])
         colors.push(rating_to_color(json_percentiles[key].toString()));
     }
+    else{
+        for(let key = 1; key<=99; key+=2){
+            labels.push(key)
+            values.push(json_percentiles[key])
+            colors.push(rating_to_color(json_percentiles[key].toString()));
+        }
+    }
     var options = {
         chart: {
-            type: 'bar'
+            type: 'bar',
+            height: 600,
+            width: "90%",
         },
         series: [{
             name: 'rating',
